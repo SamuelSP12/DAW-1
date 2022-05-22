@@ -11,6 +11,8 @@ import java.sql.ResultSet;
  */
 public class DBManager {
 
+	//Librería de conexión a MySQL agregada
+	
     // Conexión a la base de datos
     private static Connection conn = null;
 
