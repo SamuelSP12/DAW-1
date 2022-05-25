@@ -1,5 +1,6 @@
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +10,9 @@ import java.sql.ResultSet;
  *
  * @author lionel
  */
+
+//Version 1.1 | Reemplazo Statement por PreparedStatement
+
 public class DBManager {
 
     // Conexión a la base de datos
@@ -28,7 +32,7 @@ public class DBManager {
 
     // Configuración de la tabla Clientes
     private static final String DB_CLI = "clientes";
-    private static final String DB_CLI_SELECT = "SELECT * FROM " + DB_CLI;
+    private static final String DB_CLI_SELECT = "SELECT * FROM clientes";
     private static final String DB_CLI_ID = "id";
     private static final String DB_CLI_NOM = "nombre";
     private static final String DB_CLI_DIR = "direccion";
@@ -121,10 +125,14 @@ public class DBManager {
      * @param resultSetConcurrency Concurrencia del ResultSet
      * @return ResultSet (del tipo indicado) con la tabla, null en caso de error
      */
-    public static ResultSet getTablaClientes(int resultSetType, int resultSetConcurrency) {
+    public static ResultSet getTablaClientes() {
         try {
-            Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
-            ResultSet rs = stmt.executeQuery(DB_CLI_SELECT);
+            //Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
+            //Modificamos a PreparedStatement y pasamos como parametro db_cli
+        	String sql = DB_CLI_SELECT;
+            PreparedStatement statement=conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            //statement.setString(1, DB_CLI);
+            ResultSet rs = statement.executeQuery();
             //stmt.close();
             return rs;
         } catch (SQLException ex) {
@@ -134,21 +142,22 @@ public class DBManager {
 
     }
 
-    /**
+    /**BORRAMOS ESTA FUNCION YA QUE INCLUIMOS DIRECTAEMNTE LOS ATRIBUTOS RESULTSET
      * Obtiene toda la tabla clientes de la base de datos
      *
      * @return ResultSet (por defecto) con la tabla, null en caso de error
-     */
+     *
     public static ResultSet getTablaClientes() {
         return getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-    }
+    }*/
 
     /**
      * Imprime por pantalla el contenido de la tabla clientes
      */
     public static void printTablaClientes() {
         try {
-            ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+        	//Eliminamos los atributos resultstatement de gettablaclientes
+            ResultSet rs = getTablaClientes();
             while (rs.next()) {
                 int id = rs.getInt(DB_CLI_ID);
                 String n = rs.getString(DB_CLI_NOM);
@@ -174,10 +183,16 @@ public class DBManager {
     public static ResultSet getCliente(int id) {
         try {
             // Realizamos la consulta SQL
-            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
+            //Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            //String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
+        	String sql = DB_CLI_SELECT+" where id=?";
+            //Modificamos a PreparedStatement y pasamos como parametro db_cli
+            PreparedStatement stmt=conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            //stmt.setString(1, DB_CLI_SELECT);
+            stmt.setInt(1, id);
             //System.out.println(sql);
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
             //stmt.close();
             
             // Si no hay primer registro entonces no existe el cliente
@@ -263,16 +278,24 @@ public class DBManager {
         try {
             // Obtenemos la tabla clientes
             System.out.print("Insertando cliente " + nombre + "...");
-            ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+            //ResultSet rs = getTablaClientes();
+            String consulta="insert into clientes(nombre, direccion) values(?,?)";
 
-            // Insertamos el nuevo registro
+            // Insertamos el nuevo registro, usando el preapredstatement
+            /*
             rs.moveToInsertRow();
             rs.updateString(DB_CLI_NOM, nombre);
             rs.updateString(DB_CLI_DIR, direccion);
             rs.insertRow();
+            */
+            PreparedStatement sentencia=conn.prepareStatement(consulta);
+            sentencia.setString(1, nombre);
+			sentencia.setString(2, direccion);
+			sentencia.executeUpdate();
 
             // Todo bien, cerramos ResultSet y devolvemos true
-            rs.close();
+            //rs.close();
+			sentencia.close();
             System.out.println("OK!");
             return true;
 
@@ -304,10 +327,21 @@ public class DBManager {
 
             // Si tiene un primer registro, lo eliminamos
             if (rs.first()) {
+            	/*
                 rs.updateString(DB_CLI_NOM, nuevoNombre);
                 rs.updateString(DB_CLI_DIR, nuevaDireccion);
                 rs.updateRow();
                 rs.close();
+                */
+            	//hacemos la consulta mediante preparedstatement
+                String consulta="update clientes set nombre= ?, direccion=? where id=? ;";
+                PreparedStatement sentencia=conn.prepareStatement(consulta);
+                sentencia.setString(1, nuevoNombre);
+    			sentencia.setString(2, nuevaDireccion);
+    			sentencia.setInt(3, id);
+    			sentencia.executeUpdate();
+    			sentencia.close();
+
                 System.out.println("OK!");
                 return true;
             } else {
