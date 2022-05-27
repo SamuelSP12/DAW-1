@@ -29,7 +29,9 @@ public class GestionClientes {
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
         System.out.println("5. Nuevo cliente V2");
-        System.out.println("6. Salir");
+        System.out.println("6. Nueva tabla");
+        System.out.println("7. Filtrar en clientes");
+        System.out.println("8. Salir");
         
         Scanner in = new Scanner(System.in);
             

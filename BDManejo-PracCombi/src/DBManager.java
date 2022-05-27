@@ -10,7 +10,7 @@ import java.sql.ResultSet;
  * @author lionel
  */
 
-//Version 1.2 | Reemplazo Statement por PreparedStatement
+//Version 1.3.1 | Reemplazo Statement por PreparedStatement
 //Al final se encuentran los nuevos añadidos
 
 public class DBManager {
@@ -437,7 +437,7 @@ public class DBManager {
   //Metodo filtrar en la tabla clientes
     public static boolean filtrarPor(String campo, String valor) {
     	try {
-    		//creamos la tabla vacia
+    		//seleccionamos la tabla con where
     		String consulta="select * from clientes where ? = ? ;";
     		PreparedStatement sentencia=conn.prepareStatement(consulta);
             sentencia.setString(1, campo);
