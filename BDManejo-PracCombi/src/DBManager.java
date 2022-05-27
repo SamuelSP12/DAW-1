@@ -412,5 +412,49 @@ public class DBManager {
     		return false;
     	}
     }
+    
+    //Metodo de crear tabla nueva
+    public static boolean newTabla(String nombreTabla, String fila1, String tipoFila1, String fila2, String tipoFila2) {
+    	try {
+    		//creamos la tabla vacia
+    		String consulta="create table ? (? ?, ? ?);";
+    		PreparedStatement sentencia=conn.prepareStatement(consulta);
+            sentencia.setString(1, nombreTabla);
+            sentencia.setString(2, fila1);
+            sentencia.setString(3, tipoFila1);
+            sentencia.setString(4, fila2);
+            sentencia.setString(5, tipoFila2);
+    		sentencia.executeUpdate();
+			sentencia.close();
+    		return true;
+    		
+    	}catch(Exception e) {
+    		System.out.println(e.getMessage());
+    		return false;
+    	}
+    }
+    
+  //Metodo filtrar en la tabla clientes
+    public static boolean filtrarPor(String campo, String valor) {
+    	try {
+    		//creamos la tabla vacia
+    		String consulta="select * from clientes where ? = ? ;";
+    		PreparedStatement sentencia=conn.prepareStatement(consulta);
+            sentencia.setString(1, campo);
+            sentencia.setString(2, valor);
+            ResultSet rs = sentencia.executeQuery();
+            
+            //imprimimos el resultado
+            while(rs.next()) {
+    			System.out.println("\tNombre: "+rs.getString("nombre")+"\tDireccion: "+rs.getString("direccion"));
+    		}
+            
+    		return true;
+    		
+    	}catch(Exception e) {
+    		System.out.println(e.getMessage());
+    		return false;
+    	}
+    }
 
 }

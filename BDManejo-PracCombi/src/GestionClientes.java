@@ -53,6 +53,14 @@ public class GestionClientes {
             	opcionNewClienteProcAlma();
                 return false;
             case 6:
+            	//Crear nueva tabla
+            	opcionNewTabla();
+                return false;
+            case 7:
+            	//Metodo filtrar en tabla clientes
+            	opcionFiltrarPor();
+                return false;
+            case 8:
                 return true;
             default:
                 System.out.println("Opción elegida incorrecta");
@@ -175,6 +183,41 @@ public class GestionClientes {
 
         if (res) {
             System.out.println("Cliente registrado correctamente");
+        } else {
+            System.out.println("Error :(");
+        }
+    }
+    
+    public static void opcionNewTabla() {
+    	Scanner in = new Scanner(System.in);
+
+        System.out.println("Introduce los datos del nuevo cliente:");
+        String nombre = pideLinea("Nombre tabla: ");
+        String fila1 = pideLinea("Nombre campo1: ");
+        String tipoFila1 = pideLinea("Tipo campo1 (Ej: varchar(50) ): ");
+        String fila2 = pideLinea("Nombre campo2: ");
+        String tipoFila2 = pideLinea("Tipo campo2 (Ej: int ): ");
+
+        boolean res = DBManager.newTabla(nombre, fila1, tipoFila1, fila2, tipoFila2);
+
+        if (res) {
+            System.out.println("Tabla creada correctamente");
+        } else {
+            System.out.println("Error :(");
+        }
+    }
+    
+    public static void opcionFiltrarPor() {
+    	Scanner in = new Scanner(System.in);
+
+        System.out.println("Introduce los datos del nuevo cliente:");
+        String campo = pideLinea("Nombre campo (nombre ó direccion): ");
+        String filtro = pideLinea("Valor para filtrar (Ej: Luis ó Valencia ): ");
+
+        boolean res = DBManager.filtrarPor(campo,filtro);
+
+        if (res) {
+            System.out.println("Tabla creada correctamente");
         } else {
             System.out.println("Error :(");
         }
