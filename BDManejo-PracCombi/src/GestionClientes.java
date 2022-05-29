@@ -5,6 +5,13 @@ import java.util.Scanner;
  *
  * @author lionel
  */
+/**
+ * clase que funciona como interfaz de manejo
+ * de las funcionalidades de la clase DBManager
+ * 
+ * @author samue
+ *
+ */
 public class GestionClientes {
 
     public static void main(String[] args) {
@@ -91,6 +98,11 @@ public class GestionClientes {
         
     }
     
+    /**
+     * permite introducir un numero entero
+     * @param mensaje
+     * @return
+     */
     public static int pideInt(String mensaje){
         
         while(true) {
@@ -106,6 +118,11 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * permite introducir una cadena de caracteres
+     * @param mensaje
+     * @return
+     */
     public static String pideLinea(String mensaje){
         
         while(true) {
@@ -120,11 +137,17 @@ public class GestionClientes {
         }
     }
 
+    /**
+     * llama a printTablaClientes() y ejecuta el metodo
+     */
     public static void opcionMostrarClientes() {
         System.out.println("Listado de Clientes:");
         DBManager.printTablaClientes();
     }
 
+    /**
+     * pide los datos necesarios y llama a insertCliente()
+     */
     public static void opcionNuevoCliente() {
         Scanner in = new Scanner(System.in);
 
@@ -141,6 +164,9 @@ public class GestionClientes {
         }
     }
 
+    /**
+     * pide los datos necesarios y llama a updateCliente()
+     */
     public static void opcionModificarCliente() {
         Scanner in = new Scanner(System.in);
 
@@ -169,6 +195,9 @@ public class GestionClientes {
         }
     }
 
+    /**
+     * pide los datos necesarios y llama a existsCliente()
+     */
     public static void opcionEliminarCliente() {
         Scanner in = new Scanner(System.in);
 
@@ -194,6 +223,9 @@ public class GestionClientes {
     // MÉTODOS NUEVOS PEDIDOS | Samuel
     //////////////////////////////////////////////////
     
+    /**
+     * pide los datos necesarios y llama a newClienteProcAlma()
+     */
     public static void opcionNewClienteProcAlma() {
     	Scanner in = new Scanner(System.in);
 
@@ -210,6 +242,9 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * pide los datos necesarios y llama a newTabla()
+     */
     public static void opcionNewTabla() {
     	Scanner in = new Scanner(System.in);
 
@@ -229,6 +264,9 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * pide los datos necesarios y llama a filtrarPor()
+     */
     public static void opcionFiltrarPor() {
     	Scanner in = new Scanner(System.in);
 
@@ -245,12 +283,18 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * pide los datos necesarios y llama a escribirListadoClientes()
+     */
     public static void opcionArchivoListaClientes() {
         System.out.println("Creando archivo con listado de clientes...");
         DBManager.escribirListadoClientes();
         System.out.println("Archivo ListaClientes.txt creado");
     }
     
+    /**
+     * pide los datos necesarios y llama a insertarDatosFichero()
+     */
     public static void opcionInsertPorFichero() {
     	Scanner in = new Scanner(System.in);
 
@@ -266,6 +310,9 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * pide los datos necesarios y llama a actualizarDatosFichero()
+     */
     public static void opcionActuPorFichero() {
     	Scanner in = new Scanner(System.in);
 
@@ -281,6 +328,9 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * pide los datos necesarios y llama a borrarDatosFichero()
+     */
     public static void opcionBorrarPorFichero() {
     	Scanner in = new Scanner(System.in);
 

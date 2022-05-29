@@ -15,10 +15,16 @@ import java.sql.ResultSet;
  * @author lionel
  */
 
-//Version 1.5 | Permite Isertar, Actualizar, Borrar a partir de un archivo txt
-//Al final se encuentran los nuevos añadidos
-
+/**
+ * Clase donde se encuentran los metodos y funcionalidades del programa
+ * de gestion de clientes con BD
+ * @author samue | Samuel
+ *
+ */
 public class DBManager {
+
+	//Version 1.5 | Permite Isertar, Actualizar, Borrar a partir de un archivo txt
+	//Al final se encuentran los nuevos añadidos
 
     // Conexión a la base de datos
     private static Connection conn = null;
@@ -401,6 +407,13 @@ public class DBManager {
     //////////////////////////////////////////////////
     
     //Metodo de Procedimiento Almacenado
+    /**
+     * permite crear un cliente a partir de un procedimiento almacenado
+     * llamado newCliente
+     * @param nombre
+     * @param direcc
+     * @return true si se crea correctamente
+     */
     public static boolean newClienteProcAlma(String nombre, String direcc) {
     	try {
     		//llamamos al procedimiento ya creado en el sql
@@ -420,6 +433,17 @@ public class DBManager {
     
     //Metodo de crear tabla nueva
     //Arreglado y funcionando en la V1.3.1
+    /**
+     * permite crear una tabla basica con dos campos
+     * pudiendo definir el tipo de valor
+     * 
+     * @param nombreTabla
+     * @param fila1
+     * @param tipoFila1
+     * @param fila2
+     * @param tipoFila2
+     * @return true si se crea correctamente
+     */
     public static boolean newTabla(String nombreTabla, String fila1, String tipoFila1, String fila2, String tipoFila2) {
     	try {
     		//creamos la tabla vacia
@@ -443,6 +467,14 @@ public class DBManager {
     
     //Metodo filtrar en la tabla clientes
     //Arreglado y funcionando en la V1.4
+    /**
+     * permite filtrar en la tabla clientes por el
+     * campo y valor indicados como si de un where se tratase
+     * 
+     * @param campo
+     * @param valor
+     * @return true si se filtra correctamente
+     */
     public static boolean filtrarPor(String campo, String valor) {
     	try {
     		//seleccionamos la tabla llamando a gettabla
@@ -470,6 +502,12 @@ public class DBManager {
     }
     
     //Metodo para obtener el string de la lista de clientes
+    /**
+     * devuelve el listado, es decir, la tabla clientes,
+     * en forma de string
+     * 
+     * @return string con el listado de clientes
+     */
     public static String getListaClientes() {
     	String listado="BD: Tienda\tTabla: Clientes\nID\tNombre\tDireccion\n";
         try {
@@ -492,6 +530,10 @@ public class DBManager {
     }
     
     //Metodo copiar datos a archivo txt
+    /**
+     * permite escribir en el fichero indicado
+     * el listado de clientes llamando al metodo getListaClientes()
+     */
     public static void escribirListadoClientes() {
 		String texto="";
 		texto=getListaClientes();
@@ -513,6 +555,14 @@ public class DBManager {
 	}
     
     //Metodo insertar mediante fichero
+    /**
+     * realiza un insert into en la tabla deseada y
+     * con los campos y valores deseados, indicando el nombre
+     * del fichero donde provinenen estos datos
+     * 
+     * @param nomFichero donde se encuentran los datos a insertar
+     * @return true si se han podido insertar
+     */
     public static boolean insertarDatosFichero(String nomFichero) {
     	
     	String nomBD,nomTab,nomCampo, nomCampo2, nomValor, nomValor2, linea;
@@ -552,6 +602,14 @@ public class DBManager {
     }
     
   //	Metodo actualizar mediante fichero
+    /**
+     * realiza un update en la tabla deseada y
+     * con los campos y valores deseados, indicando el nombre
+     * del fichero donde provinenen estos datos
+     * 
+     * @param nomFichero donde se encuentran los datos a updatear
+     * @return true si se han podido updatear
+     */
     public static boolean actualizarDatosFichero(String nomFichero) {
     	
     	String nomBD,nomTab,nomCampo, campoCondi, nomValor, valorCondi, linea;
@@ -590,6 +648,14 @@ public class DBManager {
     }
     
 //	Metodo Borrar mediante fichero
+    /**
+     * realiza un delete en la tabla deseada y
+     * con los campos y valores deseados, indicando el nombre
+     * del fichero donde provinenen estos datos
+     * 
+     * @param nomFichero donde se encuentran los datos a borrar
+     * @return true si se han podido borrar
+     */
     public static boolean borrarDatosFichero(String nomFichero) {
     	
     	String nomTab, campoCondi, valorCondi, linea;
