@@ -1,5 +1,7 @@
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,7 +12,7 @@ import java.sql.ResultSet;
  * @author lionel
  */
 
-//Version 1.3.1 | Reemplazo Statement por PreparedStatement
+//Version 1.4 | Solucionado problemas en los ultimos metodos y creacion archivo ListaClientes.txt
 //Al final se encuentran los nuevos añadidos
 
 public class DBManager {
@@ -339,7 +341,7 @@ public class DBManager {
                 sentencia.setString(1, nuevoNombre);
     			sentencia.setString(2, nuevaDireccion);
     			sentencia.setInt(3, id);
-    			sentencia.executeUpdate();
+    			sentencia.executeQuery();
     			sentencia.close();
 
                 System.out.println("OK!");
@@ -414,17 +416,19 @@ public class DBManager {
     }
     
     //Metodo de crear tabla nueva
+    //Arreglado y funcionando en la V1.3.1
     public static boolean newTabla(String nombreTabla, String fila1, String tipoFila1, String fila2, String tipoFila2) {
     	try {
     		//creamos la tabla vacia
-    		String consulta="create table ? (? ?, ? ?);";
+    		//String consulta="create table ?(? ?,? ?)";
+    		String consulta="create table "+nombreTabla+"("+fila1+" "+tipoFila1+","+fila2+" "+tipoFila2+")";
     		PreparedStatement sentencia=conn.prepareStatement(consulta);
-            sentencia.setString(1, nombreTabla);
+            /*sentencia.setString(1, nombreTabla);
             sentencia.setString(2, fila1);
             sentencia.setString(3, tipoFila1);
             sentencia.setString(4, fila2);
-            sentencia.setString(5, tipoFila2);
-    		sentencia.executeUpdate();
+            sentencia.setString(5, tipoFila2);*/
+    		sentencia.execute();
 			sentencia.close();
     		return true;
     		
@@ -434,20 +438,25 @@ public class DBManager {
     	}
     }
     
-  //Metodo filtrar en la tabla clientes
+    //Metodo filtrar en la tabla clientes
+    //Arreglado y funcionando en la V1.4
     public static boolean filtrarPor(String campo, String valor) {
     	try {
-    		//seleccionamos la tabla con where
-    		String consulta="select * from clientes where ? = ? ;";
-    		PreparedStatement sentencia=conn.prepareStatement(consulta);
-            sentencia.setString(1, campo);
-            sentencia.setString(2, valor);
-            ResultSet rs = sentencia.executeQuery();
+    		//seleccionamos la tabla llamando a gettabla
             
-            //imprimimos el resultado
-            while(rs.next()) {
-    			System.out.println("\tNombre: "+rs.getString("nombre")+"\tDireccion: "+rs.getString("direccion"));
-    		}
+            ResultSet rs1 = getTablaClientes();
+            while (rs1.next()) {
+            	//imprimimos el resultado comparando los valores
+            	if(campo.equals("nombre") && valor.equals(rs1.getString("nombre"))) {
+            		System.out.println("Id: "+rs1.getInt("id")+"\tNombre: "+rs1.getString("nombre")+"\tDireccion: "+rs1.getString("direccion"));
+            	}
+            	if(campo.equals("id") && Integer.parseInt(valor)==(rs1.getInt("id"))) {
+            		System.out.println("Id: "+rs1.getInt("id")+"\tNombre: "+rs1.getString("nombre")+"\tDireccion: "+rs1.getString("direccion"));
+            	}
+            	if(campo.equals("direccion") && valor.equals(rs1.getString("direccion"))) {
+            		System.out.println("Id: "+rs1.getInt("id")+"\tNombre: "+rs1.getString("nombre")+"\tDireccion: "+rs1.getString("direccion"));
+            	}
+            }
             
     		return true;
     		
@@ -456,5 +465,49 @@ public class DBManager {
     		return false;
     	}
     }
+    
+    //Metodo para obtener el string de la lista de clientes
+    public static String getListaClientes() {
+    	String listado="BD: Tienda\tTabla: Clientes\nID\tNombre\tDireccion\n";
+        try {
+        	//Obtenemos la tabla y la guardamos en un string
+            ResultSet rs = getTablaClientes();
+            while (rs.next()) {
+                int id = rs.getInt(DB_CLI_ID);
+                String n = rs.getString(DB_CLI_NOM);
+                String d = rs.getString(DB_CLI_DIR);
+                //System.out.println(id + "\t" + n + "\t" + d);
+                listado=(listado)+(id + "\t" + n + "\t" + d+"\n");
+            }
+            rs.close();
+            return listado;
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return listado;
+        }
+    }
+    
+    //Metodo copiar datos a archivo txt
+    public static void escribirListadoClientes() {
+		String texto="";
+		texto=getListaClientes();
+		System.out.println(texto);
+		//Una vez recibido el string con la tabla lo escribimos
+		
+		try {
+			FileWriter escritura=new FileWriter("ListaClientes.txt");
+			
+			for(int i=0;i<texto.length();i++) {
+				
+				escritura.write(texto.charAt(i));
+			}
+			escritura.close();
+			
+		}catch (IOException e) {
+			System.out.println("Error al escribir");
+		}
+	}
+    
 
 }

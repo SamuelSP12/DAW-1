@@ -31,7 +31,8 @@ public class GestionClientes {
         System.out.println("5. Nuevo cliente V2");
         System.out.println("6. Nueva tabla");
         System.out.println("7. Filtrar en clientes");
-        System.out.println("8. Salir");
+        System.out.println("8. Crear archivo lista clientes");
+        System.out.println("9. Salir");
         
         Scanner in = new Scanner(System.in);
             
@@ -63,6 +64,10 @@ public class GestionClientes {
             	opcionFiltrarPor();
                 return false;
             case 8:
+            	//Metodo crear archivo lista clientes
+            	opcionArchivoListaClientes();
+                return false;
+            case 9:
                 return true;
             default:
                 System.out.println("Opción elegida incorrecta");
@@ -193,7 +198,7 @@ public class GestionClientes {
     public static void opcionNewTabla() {
     	Scanner in = new Scanner(System.in);
 
-        System.out.println("Introduce los datos del nuevo cliente:");
+        System.out.println("Introduce los datos de la tabla:");
         String nombre = pideLinea("Nombre tabla: ");
         String fila1 = pideLinea("Nombre campo1: ");
         String tipoFila1 = pideLinea("Tipo campo1 (Ej: varchar(50) ): ");
@@ -212,16 +217,22 @@ public class GestionClientes {
     public static void opcionFiltrarPor() {
     	Scanner in = new Scanner(System.in);
 
-        System.out.println("Introduce los datos del nuevo cliente:");
-        String campo = pideLinea("Nombre campo (nombre ó direccion): ");
-        String filtro = pideLinea("Valor para filtrar (Ej: Luis ó Valencia ): ");
+        System.out.println("Introduce los datos para filtrar:");
+        String campo = pideLinea("Nombre campo (id ó nombre ó direccion): ");
+        String filtro = pideLinea("Valor para filtrar (Ej: 1 ó Luis ó Valencia ): ");
 
         boolean res = DBManager.filtrarPor(campo,filtro);
 
         if (res) {
-            System.out.println("Tabla creada correctamente");
+            System.out.println("Lista obtenida correctamente");
         } else {
             System.out.println("Error :(");
         }
+    }
+    
+    public static void opcionArchivoListaClientes() {
+        System.out.println("Creando archivo con listado de clientes...");
+        DBManager.escribirListadoClientes();
+        System.out.println("Archivo ListaClientes.txt creado");
     }
 }
