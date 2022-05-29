@@ -1,0 +1,2 @@
+clientes;direccion;'Urug'
+clientes;id;12

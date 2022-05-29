@@ -32,7 +32,10 @@ public class GestionClientes {
         System.out.println("6. Nueva tabla");
         System.out.println("7. Filtrar en clientes");
         System.out.println("8. Crear archivo lista clientes");
-        System.out.println("9. Salir");
+        System.out.println("9. Insertar mediante archivo");
+        System.out.println("10. Actualizar mediante archivo");
+        System.out.println("11. Borrar mediante archivo");
+        System.out.println("12. Salir");
         
         Scanner in = new Scanner(System.in);
             
@@ -68,6 +71,18 @@ public class GestionClientes {
             	opcionArchivoListaClientes();
                 return false;
             case 9:
+            	//Metodo insertar en tabla mediante archivo
+            	opcionInsertPorFichero();
+                return false;
+            case 10:
+            	//Metodo actualizar en tabla mediante archivo
+            	opcionActuPorFichero();
+                return false;
+            case 11:
+            	//Metodo borrar en tabla mediante archivo
+            	opcionBorrarPorFichero();
+                return false;
+            case 12:
                 return true;
             default:
                 System.out.println("Opción elegida incorrecta");
@@ -234,5 +249,50 @@ public class GestionClientes {
         System.out.println("Creando archivo con listado de clientes...");
         DBManager.escribirListadoClientes();
         System.out.println("Archivo ListaClientes.txt creado");
+    }
+    
+    public static void opcionInsertPorFichero() {
+    	Scanner in = new Scanner(System.in);
+
+        System.out.println("Introduce los datos del fichero:");
+        String ruta = pideLinea("Ruta del fichjero (Ej: ficheroPrueba.txt ): ");
+
+        boolean res = DBManager.insertarDatosFichero(ruta);
+
+        if (res) {
+            System.out.println("Datos insertados correctamente");
+        } else {
+            System.out.println("Error :(");
+        }
+    }
+    
+    public static void opcionActuPorFichero() {
+    	Scanner in = new Scanner(System.in);
+
+        System.out.println("Introduce los datos del fichero:");
+        String ruta = pideLinea("Ruta del fichjero (Ej: ficheroPrueba.txt ): ");
+
+        boolean res = DBManager.actualizarDatosFichero(ruta);
+
+        if (res) {
+            System.out.println("Datos actualizados correctamente");
+        } else {
+            System.out.println("Error :(");
+        }
+    }
+    
+    public static void opcionBorrarPorFichero() {
+    	Scanner in = new Scanner(System.in);
+
+        System.out.println("Introduce los datos del fichero:");
+        String ruta = pideLinea("Ruta del fichjero (Ej: ficheroPrueba.txt ): ");
+
+        boolean res = DBManager.borrarDatosFichero(ruta);
+
+        if (res) {
+            System.out.println("Datos borrados correctamente");
+        } else {
+            System.out.println("Error :(");
+        }
     }
 }

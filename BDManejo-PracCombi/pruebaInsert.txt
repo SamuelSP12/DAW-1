@@ -1,0 +1,2 @@
+tienda;clientes;nombre;direccion;'Vicky';'Urug'
+tienda;clientes;nombre;direccion;'Vini';'Bras'

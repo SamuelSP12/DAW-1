@@ -1,10 +1,13 @@
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.sql.ResultSet;
 
 /**
@@ -12,7 +15,7 @@ import java.sql.ResultSet;
  * @author lionel
  */
 
-//Version 1.4 | Solucionado problemas en los ultimos metodos y creacion archivo ListaClientes.txt
+//Version 1.5 | Permite Isertar, Actualizar, Borrar a partir de un archivo txt
 //Al final se encuentran los nuevos añadidos
 
 public class DBManager {
@@ -508,6 +511,119 @@ public class DBManager {
 			System.out.println("Error al escribir");
 		}
 	}
+    
+    //Metodo insertar mediante fichero
+    public static boolean insertarDatosFichero(String nomFichero) {
+    	
+    	String nomBD,nomTab,nomCampo, nomCampo2, nomValor, nomValor2, linea;
+        
+        try{
+            File fichero = new File(nomFichero);
+            Scanner ent = new Scanner(fichero);
+            do{
+                linea = ent.nextLine();
+                //identificamos cada parte por el separador ;
+                String parte1[] = linea.split(";");
+                nomBD = parte1[0];
+                nomTab = parte1[1];
+                nomCampo = parte1[2];
+                nomCampo2 = parte1[3];
+                nomValor = parte1[4];
+                nomValor2 = parte1[5];
+                
+                String sql1="insert into "+parte1[1]+"("+parte1[2]+","+parte1[3]+") values("+parte1[4]+","+parte1[5]+")";
+                
+                //Mostramos lo que leemos
+                System.out.println(sql1);
+                
+                PreparedStatement sentencia=conn.prepareStatement(sql1);
+    			sentencia.executeUpdate();
+                
+                
+            }while(ent.hasNextLine());
+            ent.close();
+            return true;
+        }
+        catch(FileNotFoundException | SQLException ex){
+            System.err.println("ERROR. La ruta no existe"+ ex);
+            return false;
+        }
+    	
+    }
+    
+  //	Metodo actualizar mediante fichero
+    public static boolean actualizarDatosFichero(String nomFichero) {
+    	
+    	String nomBD,nomTab,nomCampo, campoCondi, nomValor, valorCondi, linea;
+        
+        try{
+            File fichero = new File(nomFichero);
+            Scanner ent = new Scanner(fichero);
+            do{
+                linea = ent.nextLine();
+                //identificamos cada parte por el separador ;
+                String parte1[] = linea.split(";");
+                nomTab = parte1[0];
+                nomCampo = parte1[1];
+                nomValor = parte1[2];
+                campoCondi = parte1[3];
+                valorCondi = parte1[4];
+                
+                String sql1="update "+parte1[0]+" set "+parte1[1]+"="+parte1[2]+" where "+parte1[3]+"="+parte1[4]+"";
+                
+                //Mostramos lo que leemos
+                System.out.println(sql1);
+                
+                PreparedStatement sentencia=conn.prepareStatement(sql1);
+    			sentencia.executeUpdate();
+                
+                
+            }while(ent.hasNextLine());
+            ent.close();
+            return true;
+        }
+        catch(FileNotFoundException | SQLException ex){
+            System.err.println("ERROR. La ruta no existe"+ ex);
+            return false;
+        }
+    	
+    }
+    
+//	Metodo Borrar mediante fichero
+    public static boolean borrarDatosFichero(String nomFichero) {
+    	
+    	String nomTab, campoCondi, valorCondi, linea;
+        
+        try{
+            File fichero = new File(nomFichero);
+            Scanner ent = new Scanner(fichero);
+            do{
+                linea = ent.nextLine();
+                //identificamos cada parte por el separador ;
+                String parte1[] = linea.split(";");
+                nomTab = parte1[0];
+                campoCondi = parte1[1];
+                valorCondi = parte1[2];
+                
+                String sql1="delete from "+parte1[0]+" where "+parte1[1]+"="+parte1[2]+"";
+                
+                //Mostramos lo que leemos
+                System.out.println(sql1);
+                
+                PreparedStatement sentencia=conn.prepareStatement(sql1);
+    			sentencia.execute();
+                
+                
+            }while(ent.hasNextLine());
+            ent.close();
+            return true;
+        }
+        catch(FileNotFoundException | SQLException ex){
+            System.err.println("ERROR. La ruta no existe"+ ex);
+            return false;
+        }
+    	
+    }
     
 
 }

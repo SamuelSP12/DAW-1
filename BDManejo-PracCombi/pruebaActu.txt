@@ -1,0 +1,2 @@
+clientes;nombre;'CR7';id;8
+clientes;direccion;'Torremo';nombre;'Vini'
