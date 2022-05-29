@@ -19,6 +19,7 @@ import java.sql.ResultSet;
  * Clase donde se encuentran los metodos y funcionalidades del programa
  * de gestion de clientes con BD
  * @author samue | Samuel
+ * @version 1.6
  *
  */
 public class DBManager {
@@ -42,12 +43,16 @@ public class DBManager {
     private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXIÓN";
 
     // Configuración de la tabla Clientes
-    private static final String DB_CLI = "clientes";
+    //private static final String DB_CLI = "clientes";
     private static final String DB_CLI_SELECT = "SELECT * FROM clientes";
     private static final String DB_CLI_ID = "id";
     private static final String DB_CLI_NOM = "nombre";
     private static final String DB_CLI_DIR = "direccion";
 
+    public DBManager() {
+    	
+    }
+    
     //////////////////////////////////////////////////
     // MÉTODOS DE CONEXIÓN A LA BASE DE DATOS
     //////////////////////////////////////////////////
